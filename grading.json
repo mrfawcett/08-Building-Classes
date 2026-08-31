@@ -1,0 +1,5 @@
+[
+ {"test": "StepTrackerTest",  "name": "StepTracker: constructor, addDailySteps, activeDays", "points": 30},
+ {"test": "AverageStepsTest", "name": "StepTracker.averageSteps",                            "points": 20},
+ {"test": "GetHintTest",      "name": "MasterMind: constructor and getHint",                 "points": 50}
+]
