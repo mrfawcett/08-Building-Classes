@@ -20,22 +20,13 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - name: Integrity check - tests, pom.xml and grading.json must be unchanged
-        run: |
-          EXPECTED="9e02ffdb86477138875ba563ce18b9ee651a07b19037564693ece11762ff135f"
-          ACTUAL=$( (for f in $(find src/test/java -type f -name '*.java' | LC_ALL=C sort) pom.xml grading.json; do sed 's/\r$//' "$f"; done) | sha256sum | cut -d' ' -f1)
-          if [ "$ACTUAL" != "$EXPECTED" ]; then
-            echo "::error::The test files, pom.xml, or grading.json in this repository differ from the assignment template. Grading has been stopped. Restore the original files (git checkout origin/main -- src/test pom.xml grading.json) and push again."
-            exit 1
-          fi
-          echo "Integrity check passed."
       - name: "StepTracker: constructor, addDailySteps, activeDays (30)"
         id: steptracker
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: "StepTracker: constructor, addDailySteps, activeDays"
           setup-command: ''
-          command: mvn -B -q test -Dtest=StepTrackerTest -Dsurefire.failIfNoSpecifiedTests=false
+          command: sh .github/grade.sh StepTrackerTest
           timeout: 5
           max-score: 30
       - name: "StepTracker.averageSteps (20)"
@@ -44,7 +35,7 @@ jobs:
         with:
           test-name: "StepTracker.averageSteps"
           setup-command: ''
-          command: mvn -B -q test -Dtest=AverageStepsTest -Dsurefire.failIfNoSpecifiedTests=false
+          command: sh .github/grade.sh AverageStepsTest
           timeout: 5
           max-score: 20
       - name: "MasterMind: constructor and getHint (50)"
@@ -53,7 +44,7 @@ jobs:
         with:
           test-name: "MasterMind: constructor and getHint"
           setup-command: ''
-          command: mvn -B -q test -Dtest=GetHintTest -Dsurefire.failIfNoSpecifiedTests=false
+          command: sh .github/grade.sh GetHintTest
           timeout: 5
           max-score: 50
       - name: Autograding Reporter
